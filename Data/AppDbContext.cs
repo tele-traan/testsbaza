@@ -14,6 +14,7 @@ namespace TestsBaza.Data
         public AppDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions)
             : base(options, operationalStoreOptions)
         {
+            Database.EnsureCreated();
         }
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }

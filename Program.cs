@@ -30,7 +30,7 @@ IServiceCollection services = builder.Services;
         options.Password.RequireDigit = false;
         options.Password.RequireLowercase = false;
         options.Password.RequireUppercase = false;
-        options.SignIn.RequireConfirmedAccount = true;
+        options.SignIn.RequireConfirmedAccount = false;
         })
         .AddEntityFrameworkStores<AppDbContext>();
 
@@ -50,7 +50,6 @@ WebApplication app = builder.Build();
 {
     if (app.Environment.IsDevelopment()) app.UseMigrationsEndPoint();
     else app.UseHsts();
-    
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();

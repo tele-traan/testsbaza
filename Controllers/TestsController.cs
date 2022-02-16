@@ -22,8 +22,8 @@ namespace TestsBaza.Controllers
         {
             IEnumerable<TestJsonModel> allTests = _testsRepo.GetAllTests().Select(t=>new TestJsonModel
             {
-                TestName = t.TestName,
-                AuthorName=t.Creator.UserName,
+                TestName = t.TestName!,
+                AuthorName=t.Creator!.UserName,
                 Questions = t.Questions.Select(q=>new QuestionJsonModel
                 {
                     Question = q.Value,
@@ -33,7 +33,7 @@ namespace TestsBaza.Controllers
             return Json(allTests);
         }
 
-        [HttpGet("test{testId?}")]
+        [HttpGet("test/{testId?}")]
         public IActionResult GetTest([FromQuery][FromRoute]int testId)
         {
             Test? test = _testsRepo.GetTest(testId);
@@ -76,7 +76,7 @@ namespace TestsBaza.Controllers
             User? creator = await _userManager.FindByNameAsync(User.Identity!.Name!);
             Test? test = _testsRepo.GetTest(model.TestId);
             if (test is null) return NotFound(new { message = $"Теста с идентификатором {model.TestId} не существует" });
-            if (creator is null || !test.Creator.Equals(creator)) return Unauthorized();
+            if (creator is null || !test.Creator!.Equals(creator)) return Unauthorized();
             test.TestName = model.NewTestName ?? test!.TestName;
             test.Questions = test.Questions.Concat(model.NewQuestions.Select(q=>new Question
             {
@@ -94,7 +94,7 @@ namespace TestsBaza.Controllers
             User? creator = await _userManager.FindByNameAsync(User.Identity!.Name!);
             Test? test = _testsRepo.GetTest(testId);
             if (test is null) return NotFound(new { message = $"Теста с идентификатором {testId} не существует" });
-            if (creator is null || !test.Creator.Equals(creator)) return Unauthorized();
+            if (creator is null || !test.Creator!.Equals(creator)) return Unauthorized();
             _testsRepo.RemoveTest(test);
             return Ok();
         }

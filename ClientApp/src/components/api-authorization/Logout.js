@@ -91,8 +91,6 @@ export class Logout extends Component {
         const result = await authService.completeSignOut(url);
         switch (result.status) {
             case AuthenticationResultStatus.Redirect:
-                // There should not be any redirects as the only time completeAuthentication finishes
-                // is when we are doing a redirect sign in flow.
                 throw new Error('Should not redirect.');
             case AuthenticationResultStatus.Success:
                 await this.navigateToReturnUrl(this.getReturnUrl(result.state));

@@ -85,8 +85,6 @@ export class Login extends Component {
         const result = await authService.completeSignIn(url);
         switch (result.status) {
             case AuthenticationResultStatus.Redirect:
-                // There should not be any redirects as the only time completeSignIn finishes
-                // is when we are doing a redirect sign in flow.
                 throw new Error('Should not redirect.');
             case AuthenticationResultStatus.Success:
                 await this.navigateToReturnUrl(this.getReturnUrl(result.state));
@@ -103,7 +101,6 @@ export class Login extends Component {
         const params = new URLSearchParams(window.location.search);
         const fromQuery = params.get(QueryParameterNames.ReturnUrl);
         if (fromQuery && !fromQuery.startsWith(`${window.location.origin}/`)) {
-            // This is an extra check to prevent open redirects.
             throw new Error("Invalid return url. The return url needs to have the same origin as the current page.")
         }
         return (state && state.returnUrl) || fromQuery || `${window.location.origin}/`;
