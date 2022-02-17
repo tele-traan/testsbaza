@@ -1,9 +1,8 @@
 ﻿#nullable disable
 
 using System.Text;
-using System.ComponentModel.DataAnnotations;
-
 using System.Text.Encodings.Web;
+using System.ComponentModel.DataAnnotations;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity.UI.Services;
-
 
 namespace App.Areas.Identity.Pages.Account
 {
@@ -50,12 +48,17 @@ namespace App.Areas.Identity.Pages.Account
         public class InputModel
         {
 
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Вы не ввели имя пользователя")]
+            [StringLength(21, ErrorMessage ="Имя пользователя должно быть длиной от 4 до 21 символов", MinimumLength = 4)]
+            [Display(Name ="Имя пользователя")]
+            public string UserName { get; set; }
+
+            [Required(ErrorMessage ="Вы не ввели электронную почту")]
+            [EmailAddress(ErrorMessage ="Вы ввели некорректный адрес электронной почты")]
             [Display(Name = "Эл. почта")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage ="Вы не ввели пароль")]
             [StringLength(50, ErrorMessage = "Пароль должен быть длиной от 6 до 50 символов", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Пароль")]
