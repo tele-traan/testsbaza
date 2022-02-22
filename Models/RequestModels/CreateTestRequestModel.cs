@@ -8,6 +8,7 @@ namespace TestsBaza.Models
         [MinLength(4, ErrorMessage="Минимальная длина названия - 4 символа")]
         [MaxLength(35, ErrorMessage="Максимальная длина названия - 35 символов")]
         public string? TestName { get; set; }
-        public IEnumerable<QuestionJsonModel> Questions { get; set; } = new List<QuestionJsonModel>();
+        public bool? IsPrivate { get; set; }
+        //public IEnumerable<QuestionJsonModel> Questions { get; set; } = new List<QuestionJsonModel>();
     }
 }

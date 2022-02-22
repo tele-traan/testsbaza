@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 import { AddTest } from './components/AddTest'
+import { ManageTests } from './components/ManageTests'
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -16,12 +17,13 @@ export default class App extends Component {
 
   render () {
     return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-            <AuthorizeRoute path='/fetch-data' component={FetchData} />
-            <AuthorizeRoute path='/add-test' component={AddTest} />
-        <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+        <Layout>
+            <Route exact path='/' component={Home} />
+            <Route exact path='/counter' component={Counter} />
+            <Route exact path='/fetch-data' component={FetchData} />
+            <Route exact path='/add-test' component={AddTest} />
+            <Route exact path="/manage-tests" component={ManageTests} />
+            <Route exact path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );
   }

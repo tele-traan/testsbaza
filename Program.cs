@@ -42,7 +42,7 @@ IServiceCollection services = builder.Services;
 
     services.AddControllersWithViews();
     services.AddRazorPages();
-
+    services.AddCors();
     services.AddTransient<ITestsRepository, TestsRepository>();
 }
 
@@ -53,6 +53,8 @@ WebApplication app = builder.Build();
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
+
+    app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowCredentials());
     app.UseRouting();
 
     app.UseAuthentication();
@@ -63,8 +65,8 @@ WebApplication app = builder.Build();
         name: "default",
         pattern: "{controller}/{action=Index}/{id?}");
     app.MapRazorPages();
-
-    app.MapFallbackToFile("index.html"); ;
+    app.MapControllers();
+    app.MapFallbackToFile("index.html");
 
 }
 

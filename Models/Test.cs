@@ -7,7 +7,7 @@
         public IEnumerable<Question> Questions { get; set; } = new List<Question>();
         public string? CreatorId { get; set; }
         public User? Creator { get; set; }
-
+        public bool? IsPrivate { get; set; }
 
         public override bool Equals(object? obj)
         {

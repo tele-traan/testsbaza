@@ -2,7 +2,7 @@
 import { Redirect } from 'react-router-dom';
 import authService from './api-authorization/AuthorizeService'
 
-export class AddTests extends Component {
+export class AddTest extends Component {
     constructor(props) {
         super(props);
         this.state = {created:false, success:true,errors:[]};
@@ -10,48 +10,53 @@ export class AddTests extends Component {
     }
     render() {
         return (
-            !this.state.created
-                ? (<>
-                    <h1>Создать тест</h1>
-                    <form name="createTest" method="post">
+            this.state.created ?
+                  (this.state.success ?
+                     <Redirect to="/manage-tests" />
+                    : AddTest.renderErrors(this.state.errors))
+            : (<>
+            <h1>Создать тест</h1>
+            <form name="createTest" method="post" encType="multipart/form-data">
 
-                        <label for="TestName">Название теста</label>
-                        <input type="text" name="TestName" id="TestName" />
+                <label>Название теста</label><br />
+                <input type="text" name="TestName" id="TestName" /><br />
 
-                        <label for="IsPrivate">Доступен только по ссылке</label>
-                        <input type="checkbox" name="IsPrivate" id="IsPrivate" checked />
+                <label>Доступен только по ссылке</label><br />
+                <input type="checkbox" name="IsPrivate" id="IsPrivate" defaultChecked value="true" /><br />
 
-                        <input type="submit" value="Создать тест" onClick={this.handleSubmit} />
-                    </form>
-                </>)
-                : this.state.success
-                    ? <Redirect to="/manage-tests" />
-                    : AddTests.renderErrors(this.state.errors)
+                <input type="submit" value="Создать тест" onClick={this.handleSubmit} />
+            </form>
+        </>)
             );
     }
-    handleSubmit() {
+    async handleSubmit(e) {
+        e.preventDefault();
         const form = document.forms["createTest"];
-        const formData = new FormData();
-        formData.append("TestName", form.elements["TestName"].value);
-        formData.append("IsPrivate", form.elemets["IsPrivate"].value);
-
+        const formData = new FormData(form);
+        /*formData.append("model.TestName", form.elements["TestName"].value);
+        formData.append("model.IsPrivate", form.elements["IsPrivate"].value);
+        alert(form.elements["IsPrivate"].checked)*/
+        /*const formData = JSON.stringify({
+            TestName: form.elements["TestName"].value,
+            IsPrivate: form.elements["IsPrivate"].value
+        });*/
         const accessToken = await authService.getAccessToken();
-        const response = await fetch("api/createTest", {
+        const response = await fetch("/api/test/add-test", {
             method: "POST",
             body: formData,
-            headers: !!accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}
+            headers: !accessToken ? {} : {'Authorization': `Bearer ${accessToken}`}
         });
-        const result = response.json();
-        this.setState({ created: true, success: response.ok, errors: result.errors })
+        if (response.ok) this.setState({ created: true, success: true });
+        else {
+            response.json().then(res => this.setState({ created: true, success: false, errors: res.errors }));
+            alert(`is response.ok - ${response.ok}`);
+        }
     }
 
     static renderErrors(errors) {
         return (<>
-            {errors.map(error => {
-                <div key={error.message}>
-                    <h3>{error.message}</h3>
-                </div>
-            })}
+            <h1>{errors.TestName}</h1>
+            <h1>{errors.IsPrivate}</h1>
         </>);
     }
 }
