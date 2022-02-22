@@ -77,34 +77,25 @@ namespace TestsBaza.Controllers
         }
         [Authorize]
         [HttpPost("add-test")]
-        public async Task<IActionResult> CreateTest([FromForm]CreateTestRequestModel model)
+        public async Task<IActionResult> CreateTest([FromForm] CreateTestRequestModel model)
         {
-            try
+            _logger.LogInformation($"New create test request, TestName-{model.TestName}, IsPrivate:{model.IsPrivate}");
+
+            string userName = User.Identity!.Name!;
+            User creator = await _userManager.FindByNameAsync(userName);
+
+            if (_testsRepo.GetTest(model.TestName!) is not null) 
+                return StatusCode(403, new { message = "Тест с таким названием уже есть" });
+
+            Test test = new()
             {
-                _logger.LogInformation($"TestName-{model.TestName}, IsPrivate:{model.IsPrivate}");
-                string userName = User.Identity!.Name!;
-                User creator = await _userManager.FindByNameAsync(userName);
-                if (ModelState.IsValid)
-                {
-                    Test test = new()
-                    {
-                        Creator = creator,
-                        TestName = model.TestName!,
-                        IsPrivate = model.IsPrivate
-                    };
-                    _testsRepo.AddTest(test);
-                    return Ok();
-                }
-                else
-                {
-                    _logger.LogError($"modelstate err, testname: {model.TestName}, isPrivate: {model.IsPrivate}");
-                    return StatusCode(105);
-                }
-            } catch(Exception e)
-            {
-                _logger.LogError(e.Message);
-                return StatusCode(105);
-            }
+                Creator = creator,
+                TestName = model.TestName!,
+                IsPrivate = model.IsPrivate,
+                TimeCreated = DateTime.Now
+            };
+            _testsRepo.AddTest(test);
+            return Ok();
         }
 
         [HttpPost("update-test")]

@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react'
+import TestSummary from './components/TestSummary'
 import authService from './api-authorization/AuthorizeService'
 
 export class ManageTests extends Component {
@@ -35,37 +36,17 @@ export class ManageTests extends Component {
             }
         });
     }
+
     renderTests() {
         return (<>
 
             {this.state.tests.map(test => {
                 <div key={test.Id}>
-                    <h1>Тест {test.name}</h1>
-                    <h2>Дата создания: {test.dateCreated}</h2>
+                    <TestSummary id={test.Id} name={test.TestName} date={test.TimeCreated} />
                     <a href={`/edit-test?testId=${test.Id}`}>Редактировать тест</a>
-                    <form>
-                        <input type="button" onClick={e => this.handleDelete(e)} value="Удалить тест" />
-                        <input type="hidden" value={test.Id} name="id" />
-                    </form>
                 </div>
             })}
 
         </>)
-    }
-    async handleDelete(e) {
-        const form = e.target.form;
-        const testId = form.elements["id"].value;
-        const accessToken = await authService.getAccessToken();
-        await fetch('/api/test/delete-test', {
-            method: 'POST',
-            body: JSON.stringify({'testId': testId}),
-            headers: !accessToken ? {} : { 'Authorization': `Bearer ${accessToken}` }
-        }).then(response => {
-            if (response.ok) {
-                response.json().then();
-            } else {
-                alert('')
-            }
-        })
     }
 }

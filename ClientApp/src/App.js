@@ -23,6 +23,7 @@ export default class App extends Component {
             <Route exact path='/fetch-data' component={FetchData} />
             <Route exact path='/add-test' component={AddTest} />
             <Route exact path="/manage-tests" component={ManageTests} />
+            <Route path="/edit-test" component={EditTest} />
             <Route exact path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

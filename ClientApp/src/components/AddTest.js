@@ -33,13 +33,6 @@ export class AddTest extends Component {
         e.preventDefault();
         const form = document.forms["createTest"];
         const formData = new FormData(form);
-        /*formData.append("model.TestName", form.elements["TestName"].value);
-        formData.append("model.IsPrivate", form.elements["IsPrivate"].value);
-        alert(form.elements["IsPrivate"].checked)*/
-        /*const formData = JSON.stringify({
-            TestName: form.elements["TestName"].value,
-            IsPrivate: form.elements["IsPrivate"].value
-        });*/
         const accessToken = await authService.getAccessToken();
         const response = await fetch("/api/test/add-test", {
             method: "POST",
@@ -48,8 +41,10 @@ export class AddTest extends Component {
         });
         if (response.ok) this.setState({ created: true, success: true });
         else {
+            if (response.status === 403) {
+                this.setState({ created: false, success: false, errors: [] });
+            }
             response.json().then(res => this.setState({ created: true, success: false, errors: res.errors }));
-            alert(`is response.ok - ${response.ok}`);
         }
     }
 
