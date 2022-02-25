@@ -25,17 +25,18 @@ namespace App.Areas.Identity.Pages.Account
 
         [TempData]
         public string StatusMessage { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
             if (userId is null || code is null)
             {
-                return RedirectToPage("/Index");
+                return Redirect("/");
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return NotFound($"Пользователя с ID {userId} не существует");
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));

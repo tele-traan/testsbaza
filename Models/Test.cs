@@ -4,6 +4,7 @@
     {
         public int TestId { get; set; }
         public string? TestName { get; set; }
+        public string? Difficulty { get; set; }
         public IEnumerable<Question> Questions { get; set; } = new List<Question>();
         public DateTime TimeCreated { get; set; }
         public string? CreatorId { get; set; }

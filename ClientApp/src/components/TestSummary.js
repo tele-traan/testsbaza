@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react'
 import authService from './api-authorization/AuthorizeService'
 
-export default class TestSummary extends Component {
+export class TestSummary extends Component {
     constructor(props) {
         super(props);
         this.state = { isDeleted: false };
@@ -17,7 +17,7 @@ export default class TestSummary extends Component {
         </>)
     }
     async handleDelete() {
-        if (!confirm(`Вы уверены, что хотите удалить тест ${this.props.name} навсегда?`)) return;
+        if (!window.confirm(`Вы уверены, что хотите удалить тест ${this.props.name} навсегда?`)) return;
         const accessToken = await authService.getAccessToken();
         await fetch('/api/test/delete-test', {
             method: 'POST',

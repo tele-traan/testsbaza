@@ -4,7 +4,8 @@
     {
 #pragma warning disable CS8618
         public int QuestionId { get; set; }
-        
+
+        public int Number {get;set;}
         public string Value { get; set; }
         public string Answer { get; set; }
 
