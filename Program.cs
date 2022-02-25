@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 
 using TestsBaza.Data;
 using TestsBaza.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ IServiceCollection services = builder.Services;
         options.Password.RequireLowercase = false;
         options.Password.RequireUppercase = false;
         options.SignIn.RequireConfirmedAccount = false;
+        
         })
         .AddEntityFrameworkStores<AppDbContext>();
 
@@ -38,9 +40,10 @@ IServiceCollection services = builder.Services;
         .AddApiAuthorization<User, AppDbContext>();
 
     services.AddAuthentication()
-        .AddIdentityServerJwt();
+        .AddIdentityServerJwt()
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
-    services.AddControllersWithViews();
+    services.AddControllersWithViews().ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
     services.AddRazorPages();
     services.AddCors();
     services.AddTransient<ITestsRepository, TestsRepository>();

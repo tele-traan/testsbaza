@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react'
-import TestSummary from './components/TestSummary'
+import { TestSummary } from './TestSummary'
 import authService from './api-authorization/AuthorizeService'
 
 export class ManageTests extends Component {

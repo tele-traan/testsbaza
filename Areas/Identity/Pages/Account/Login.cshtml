@@ -41,9 +41,6 @@
                     <p>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Создать аккаунт</a>
                     </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
                 </div>
             </form>
         </section>
@@ -52,16 +49,11 @@
         <section>
             <h3>Войдите</h3>
             <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            Войдите в свой аккаунт, чтобы получить доступ к основному функционалу сайта
-                        </p>
-                    </div>
-                }
-            }
+                <div>
+                    <p>
+                        Войдите в свой аккаунт, чтобы получить доступ к основному функционалу сайта
+                    </p>
+                </div>
         </section>
     </div>
 </div>
